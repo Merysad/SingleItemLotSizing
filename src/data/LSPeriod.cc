@@ -2,10 +2,9 @@
 
 namespace data {
 	const unsigned int LSPeriod::ID_PERIOD = 0;
-	const unsigned int LSPeriod::PRODUCTION_COST = 4;
+	const unsigned int LSPeriod::PRODUCTION_COST = 3;
 	const unsigned int LSPeriod::SETUP_COST = 2;
-	const unsigned int LSPeriod::STORAGE_COST = 3;
-	const unsigned int LSPeriod::DATA_SIZE = 4;
+	const unsigned int LSPeriod::DATA_SIZE = 3;
 	const unsigned int LSPeriod::DEMAND = 1;
 
 	LSPeriod::LSPeriod(std::vector<int>& data)
@@ -21,10 +20,6 @@ namespace data {
 
 	int LSPeriod::getProductionCost(unsigned int item_id) const{
 		return this->getPeriodData(item_id*DATA_SIZE + PRODUCTION_COST);
-	}
-
-	int LSPeriod::getStorageCost(unsigned int item_id) const {
-		return this->getPeriodData(item_id*DATA_SIZE + STORAGE_COST);
 	}
 
 	int LSPeriod::getSetupCost(unsigned int item_id) const {
@@ -58,8 +53,7 @@ namespace data {
 		description << std::endl << "|" << std::setw(15) << "|";
 		for(unsigned int i=0; i<this->nb_items; i++){
 			description << "p=" << std::setw(3) << getProductionCost(i)
-						<< " f=" << std::setw(3) << getSetupCost(i)
-						<< " s=" << std::setw(3) << getStorageCost(i) << std::setw(11) << "|";
+						<< " f=" << std::setw(3) << getSetupCost(i) << std::setw(17) << "|";
 		}
 		return description.str();
 	}
