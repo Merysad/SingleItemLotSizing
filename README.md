@@ -13,6 +13,8 @@ Client git Windows/Mac : <https://desktop.github.com/>
 
 Commandes Git : <http://rogerdudler.github.io/git-guide/index.fr.html> (pour bien demarrer)
 
+Tester git : <https://try.github.io/>
+
 > On travaille tous sur la branche master, pas la peine d'en créer.
 
 ### Bon usage de git
