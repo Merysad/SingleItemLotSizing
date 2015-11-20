@@ -24,6 +24,10 @@ namespace problem{
 		return this->periods.size();
 	}
 
+	unsigned int SingleItemLotSizing::getNbItems() const{
+		return this->periods[0]->getNbItems();
+	}
+
 	int SingleItemLotSizing::getPeriodData(unsigned int p, unsigned int item, unsigned int information) const {
 		return this->periods[p]->getPeriodData(item*data::LSPeriod::DATA_SIZE + information);
 	}

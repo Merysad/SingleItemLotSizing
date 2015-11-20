@@ -29,6 +29,7 @@ namespace data {
 		int getProductionCost(unsigned int item_id) const;
 		int getSetupCost(unsigned int item_id) const;
 		int getDemand(unsigned int item_id) const;
+		unsigned int getNbItems() const;
 		std::string toString() const;
 	};
 }

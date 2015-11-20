@@ -30,6 +30,10 @@ namespace data {
 		return this->getPeriodData(item_id*DATA_SIZE + DEMAND);
 	}
 
+	unsigned int LSPeriod::getNbItems() const{
+		return this->nb_items;
+	}
+
 	std::string LSPeriod::toString() const {
 		std::stringstream description;
 

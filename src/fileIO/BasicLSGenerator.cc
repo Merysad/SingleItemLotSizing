@@ -29,7 +29,7 @@ namespace fileIO{
 		srand(time(NULL));
 		//Initialisation des vecteurs de coût
 		for(unsigned int i=0; i<this->nb_items; i++){
-			int production_cost = MAX_PRODUCTION_COST/2 + rand()%(MAX_PRODUCTION_COST/2);
+			int production_cost = this->nb_periods + 1 + rand()%(MAX_PRODUCTION_COST);
 			int setup_cost = MAX_SETUP_COST/2 + rand()%(MAX_SETUP_COST/2);
 
 			this->production_costs.push_back(production_cost);
@@ -41,9 +41,9 @@ namespace fileIO{
 		return rand()%MAX_DEMAND+1;
 	}
 
-	int BasicLSGenerator::getProductionCost(unsigned int item_id) const {
+	int BasicLSGenerator::getProductionCost(unsigned int item_id, unsigned int period) const {
 		assert(item_id >=0 && item_id < this->production_costs.size());
-		return this->production_costs[item_id];
+		return this->production_costs[item_id] - period;
 	}
 
 	int BasicLSGenerator::getSetupCost(unsigned int item_id) const {
@@ -68,7 +68,7 @@ namespace fileIO{
 				//Cout de lancement
 				item_data.push_back(this->getSetupCost(i));
 				//Cout de production
-				item_data.push_back(this->getProductionCost(i));
+				item_data.push_back(this->getProductionCost(i,p));
 			}
 			this->writeLine(item_data,DELIMITER);
 		}

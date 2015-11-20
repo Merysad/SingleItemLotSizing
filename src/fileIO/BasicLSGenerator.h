@@ -40,7 +40,7 @@ namespace fileIO{
 		/// \brief Calcule une demande aléatoire
 		int randomDemand() const;
 
-		int getProductionCost(unsigned int item_id) const;
+		int getProductionCost(unsigned int item_id, unsigned int period) const;
 		int getSetupCost(unsigned int item_id) const;
 
 	public:

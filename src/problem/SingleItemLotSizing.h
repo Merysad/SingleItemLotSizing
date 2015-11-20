@@ -21,6 +21,7 @@ namespace problem {
 		virtual ~SingleItemLotSizing();
 		int getPeriodData(unsigned int p, unsigned int item, unsigned int information) const;
 		unsigned int getNbPeriods() const;
+		unsigned int getNbItems() const;
 		virtual std::string toString() const;
 	};
 }
