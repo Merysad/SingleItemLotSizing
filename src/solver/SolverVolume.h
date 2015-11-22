@@ -21,6 +21,15 @@ namespace solver {
 
 		void computeOracle(); //Calcul de z
 		float solveProblem(); //Algo pour résoudre
+		
+		void computeDualLagSolution();
+		void computeOracle();
+		void checkLagOptimalitySolution();
+		void checkIncumbentDual();
+		void checkDualOptimalityCondition();
+		void computePrimalSolution();
+		void updateIncPrimalSolution();
+
 	public:
 		SolverVolume(problem::SingleItemLotSizing* problem);
 		virtual ~SolverVolume();
