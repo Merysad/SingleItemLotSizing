@@ -83,13 +83,13 @@
  	\end{eqnarray}
  	
 \newpage 
-\paragraph{Dual de $[M^t]$} 
+\paragraph{Dual de $[M^t]$} Soient $\pi$ variable duale de la contrainte $(4)$ et $\eta$ variable duale de la contrainte $(5)$.
 
 $$ [DM^t] ~~~ max ~ \eta $$	
 
 \begin{eqnarray}	
- 		\sum_{\tau=1}^T \sum_{i=1}^N \pi_{i\tau}h_{i\tau}^q + \eta &\leq (p~f)^T(g^q~h^q) \\
- 		\lambda_q \geq 0,& q \in Q^t & \nonumber
+ 		\sum_{\tau=1}^T \pi_{\tau} \left( \sum_{i=1}^N h_{i\tau}^q -1 \right) + \eta &\leq (p~f)^T(g^q~h^q)  &, q\in Q^t\\
+ 		\pi \in \mathbb{R}^T_+,& \eta \in \mathbb{R}^1 \nonumber
  \end{eqnarray}
  	
 
@@ -100,7 +100,7 @@ $$ [DM^t] ~~~ max ~ \eta $$
  
  $$ g^0=(\underbrace{D^1_{0T}~0~..~0}_{N \text{ items}} ~ \underbrace{0~D^2_{1T}~..~0} ~ \underbrace{0~0~..~D^N_{N-1,T}} ~0~..~0) $$ 
  
- $$h^0=(\underbrace{1~0~..~0}_{N \text{ items}} ~ \underbrace{0~1~..~0} ~ \underbrace{0~0~..~1} ~0~..~0) \text{ et } \pi^0=(0)_{1 \leq t \leq N\times T} $$
+ $$h^0=(\underbrace{1~0~..~0}_{N \text{ items}} ~ \underbrace{0~1~..~0} ~ \underbrace{0~0~..~1} ~0~..~0) \text{ et } \pi^0=(0)_{1 \leq t T} $$
  
  Enfin, nous initialisons la variable $t \leftarrow 1$, indiquant le nombre d'itérations, la borne inférieure $\hat{L}$ et la borne supérieure $\hat{U}$ de $[DM]$.
  
@@ -109,13 +109,13 @@ $$ [DM^t] ~~~ max ~ \eta $$
  |1 - \sum_{i=1}^N h_{i \tau}^t|^2 }}_{\parallel \mathds{1} - Ah^t \parallel}} \times \dfrac{1}{\underbrace{\sqrt{\sum_{\tau=1}^T |1 - \sum_{i=1}^N y_{i \tau}^t|^2 }}_{\parallel \mathds{1} - Ay^t \parallel}}$$
  
  Nous pouvons calculer le nouveau vecteur.
- $$ \pi^t \leftarrow (\hat{\pi} + \theta \varrho (\mathds{1}-Ay^t))^+ ~~~~ \theta \in [0,2] $$
+ $$ \pi^t_\tau \leftarrow (\hat{\pi}_\tau + \theta \varrho (1-\sum_{i=1}^Ny^t_{i\tau}))^+ ~~~~ \theta \in [0,2] $$
  
  \paragraph{Oracle} Lagrangian subproblem oracle call
  
- $$ z^t \leftarrow arg\min_{(x~y)\in Z}\{ px^T +  \sum_{\tau=1}^T \sum_{i=1}^N ( f_{i\tau} - \pi_{i\tau}^t y_{i\tau}) \} \text{ et la valeur minimale } r^t$$
+ $$ z^t \leftarrow arg\min_{(x~y)\in Z}\{ r^t \leftarrow px^T +  \sum_{\tau=1}^T \sum_{i=1}^N ( f_{i\tau} - \pi_{\tau}^t y_{i\tau}) \}$$
  
- $$L^t \leftarrow r^t + \sum_{\tau=1}^T \sum_{i=1}^N \pi_{i\tau}^t$$
+ $$L^t \leftarrow r^t + \sum_{\tau=1}^T \pi_{\tau}^t$$
  
  
  
