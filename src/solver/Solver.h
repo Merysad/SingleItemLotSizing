@@ -13,15 +13,15 @@
 namespace solver {
 	class Solver{
 	protected:
-		virtual float solveProblem() = 0;
+		virtual double solveProblem() = 0;
 
 	public:
 		Solver();
 		virtual ~Solver();
-		virtual float getValue() const = 0;
+		virtual double getValue() const = 0;
 		virtual std::string toString() const = 0;
-		float solveVerbose();
-		float solve();
+		double solveVerbose();
+		double solve();
 	};
 }
 #endif

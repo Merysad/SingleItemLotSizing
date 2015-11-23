@@ -88,7 +88,7 @@
 $$ [DM^t] ~~~ max ~ \eta $$	
 
 \begin{eqnarray}	
- 		\sum_{\tau=1}^T \pi_{\tau} \left( \sum_{i=1}^N h_{i\tau}^q -1 \right) + \eta &\leq (p~f)^T(g^q~h^q)  &, q\in Q^t\\
+ 		\sum_{\tau=1}^T \pi_{\tau} \left( \sum_{i=1}^N h_{i\tau}^q -1 \right) + \eta &\leq (p~f)(g^q~h^q)^T  &, q\in Q^t\\
  		\pi \in \mathbb{R}^T_+,& \eta \in \mathbb{R}^1 \nonumber
  \end{eqnarray}
  	
@@ -104,12 +104,12 @@ $$ [DM^t] ~~~ max ~ \eta $$
  
  Enfin, nous initialisons la variable $t \leftarrow 1$, indiquant le nombre d'itérations, la borne inférieure $\hat{L}$ et la borne supérieure $\hat{U}$ de $[DM]$.
  
- \paragraph{Solution duale} En appliquant l'algorithme du volume, nous calculons $\pi^{t}$. Posons $x^t$ la solution de $[M^t]$ et $\hat{\pi}$ le meilleur$^*$ vecteur pénalité.
- $$\varrho \leftarrow  \dfrac{\hat{U}-L^t}{\underbrace{\sqrt{\sum_{\tau=1}^T  
- |1 - \sum_{i=1}^N h_{i \tau}^t|^2 }}_{\parallel \mathds{1} - Ah^t \parallel}} \times \dfrac{1}{\underbrace{\sqrt{\sum_{\tau=1}^T |1 - \sum_{i=1}^N y_{i \tau}^t|^2 }}_{\parallel \mathds{1} - Ay^t \parallel}}$$
+ \paragraph{Solution duale} En appliquant l'algorithme du volume, nous calculons $\pi^{t}$. Posons $x^t$ la solution de $[M^t]$ et $\hat{\pi}$ la meilleure solution duale (correspondant à $\hat{L}$).
+ $$\varrho \leftarrow  \dfrac{\hat{U}-L^{t-1}}{\underbrace{\sqrt{\sum_{\tau=1}^T  
+ |1 - \sum_{i=1}^N h_{i \tau}^{t-1}|^2 }}_{\parallel \mathds{1} - Ah^{t-1} \parallel}} \times \dfrac{1}{\underbrace{\sqrt{\sum_{\tau=1}^T |1 - \sum_{i=1}^N y_{i \tau}^{t-1}|^2 }}_{\parallel \mathds{1} - Ay^{t-1} \parallel}}$$
  
  Nous pouvons calculer le nouveau vecteur.
- $$ \pi^t_\tau \leftarrow (\hat{\pi}_\tau + \theta \varrho (1-\sum_{i=1}^Ny^t_{i\tau}))^+ ~~~~ \theta \in [0,2] $$
+ $$ \pi^t_\tau \leftarrow (\hat{\pi}_\tau + \theta \varrho (1-\sum_{i=1}^Ny^{t-1}_{i\tau}))^+ ~~~~ \theta \in [0,2] $$
  
  \paragraph{Oracle} Lagrangian subproblem oracle call
  
@@ -117,6 +117,19 @@ $$ [DM^t] ~~~ max ~ \eta $$
  
  $$L^t \leftarrow r^t + \sum_{\tau=1}^T \pi_{\tau}^t$$
  
+ \paragraph{Optimalité pour $[P]$ } Si $z^t$ vérifie la condition $(3)$ et $\pi^t(\mathds{1} - Ah^t)= 0$.
+ 
+ \paragraph{Actualisation meilleure solution duale} Si $L^t > \hat{L}$ alors $\hat{\pi}\leftarrow \pi^t$ et $\hat{L} \leftarrow L^t$.
+ 
+ \paragraph{Optimalité pour $[LD]$} Il faut vérifier $\hat{L} = \hat{U}$.
+ 
+ \paragraph{Solution primale} Méthode du volume
+ $$(x~y)^t \leftarrow \alpha (x~y)^{t-1} + (1- \alpha)(g~h)^t$$
+ 
+ \paragraph{Itération}Nous itérons, $t \leftarrow t+1$ et $Q \leftarrow Q \cup  \{(g~h)^t\}$.
+ 
+ 
+ \section*{Résultats}
  
  
 \end{document}
