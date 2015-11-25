@@ -39,23 +39,23 @@
  	
 	\section*{Décomposition de Dantzig-Wolfe}
 	\subsection*{Sous problème}
-	\paragraph{Présentation} Nous savons résoudre le problème $[P]$ sans la contrainte $(3)$, c'est-à-dire en ayant une machine pouvant produire plusieurs types d'objets à chaque période. Pour représenter ce sous-problème $[SP]$, considérons un graphe G, chaque sommet représentant une période et chaque arête $(u,v)$ le coût pour couvrir la demande $D^i_{u,v} = \sum_{j=u+1}^{v} d_{ij}$ en objets de type $i$. \medbreak
+	\paragraph{Présentation} Nous savons résoudre le problème $[P]$ sans la contrainte $(3)$, c'est-à-dire en ayant une machine pouvant produire plusieurs types d'objets à chaque période. Pour représenter ce sous-problème $[SP]$, considérons un graphe G, chaque sommet représentant une période et chaque arête $(u,v)$ le coût pour couvrir la demande $D^i_{u,v} = \sum_{j=u}^{v-1} d_{ij}$ en objets de type $i$. \medbreak
 	
 	\begin{figure}[h!]
 		\centering
 		\begin{tikzpicture}
-         \node[draw,circle,minimum size=1.0cm](A) at (0,0) {$0$};
-         \node[draw,circle,minimum size=1.0cm](B) at (3,0) {$1$};
+         \node[draw,circle,minimum size=1.0cm](A) at (0,0) {$1$};
+         \node[draw,circle,minimum size=1.0cm](B) at (3,0) {$2$};
          \node[](H) at (5,0){...};
-         \node[draw,circle,minimum size=1.0cm](C) at (8,0) {$T-1$};
-         \node[draw,circle,minimum size=1.0cm](D) at (11,0) {$T$};
+         \node[draw,circle,minimum size=1.0cm](C) at (8,0) {$T$};
+         \node[draw,circle,minimum size=1.0cm](D) at (11,0) {T+1};
 
-         \draw[->,>=latex](A) -- node[midway,below]{$D^i_{01}$} (B);
-         \draw[->,>=latex](A)to[bend left=20] node[midway,above]{$D^i_{0T-1}$} (C);
-         \draw[->,>=latex](A)to[bend left=35] node[midway,above]{$D^i_{0T}$} (D);
-         \draw[->,>=latex](B)to[bend left=-25] node[midway,above]{$D^i_{1T-1}$} (C);
-         \draw[->,>=latex](B)to[bend left=-35] node[midway,above]{$D^i_{1T}$} (D);
-         \draw[->,>=latex](C) -- node[midway,above]{$D^i_{T-1,T}$} (D);
+         \draw[->,>=latex](A) -- node[midway,below]{$D^i_{12}$} (B);
+         \draw[->,>=latex](A)to[bend left=20] node[midway,above]{$D^i_{1T}$} (C);
+         \draw[->,>=latex](A)to[bend left=35] node[midway,above]{$D^i_{1,T+1}$} (D);
+         \draw[->,>=latex](B)to[bend left=-25] node[midway,above]{$D^i_{2T}$} (C);
+         \draw[->,>=latex](B)to[bend left=-35] node[midway,above]{$D^i_{2,T+1}$} (D);
+         \draw[->,>=latex](C) -- node[midway,above]{$D^i_{T,T+1}$} (D);
 		\end{tikzpicture}
 	\caption{Graphe pour résoudre le sous-problème pour les objets de type $i$.}
 	\end{figure}
@@ -64,11 +64,11 @@
 	 
 	 \paragraph{Résolution} Soit $M(i,a,b)$ le coût minimum pour couvrir la demande en item $i$ de la période $a$ à la période $b$.
 	 
-	 $$ M(i,a,b) =  \min_{l \in \{a,b\}} \{ p_{al}D_{al} + M(i,l,b) \} $$
+	 $$ M(i,a,b) =  \min_{l \in \{a,b\}} \{ p_{i,a}D_{al} + f_{i,a} + M(i,l,b) \} $$
 	 
 	 On peut donc résoudre le problème $[SP]$.
 	 
-	 $$ OPT([SP]) = \sum_{i=0}^N min~M(i,0,T) $$
+	 $$ OPT([SP]) = \sum_{i=0}^N min~M(i,1,T+1) $$
 	
 	Nous notons $Z$ l'ensemble des points extrêmes générés de $[SP]$, $Z=\{z^q\}_{q\in Q} = \{ (g^q~h^q) \}_{q\in Q}$.
 	
@@ -102,7 +102,9 @@ $$ [DM^t] ~~~ max ~ \eta $$
  
  $$h^0=(\underbrace{1~0~..~0}_{N \text{ items}} ~ \underbrace{0~1~..~0} ~ \underbrace{0~0~..~1} ~0~..~0) \text{ et } \pi^0=(0)_{1 \leq t T} $$
  
- Enfin, nous initialisons la variable $t \leftarrow 1$, indiquant le nombre d'itérations, la borne inférieure $\hat{L}$ et la borne supérieure $\hat{U}$ de $[DM]$.
+ Enfin, nous initialisons la variable $t \leftarrow 1$, indiquant le nombre d'itérations, la borne inférieure $\hat{L}$ et la borne supérieure $\hat{U}$ de $[DM]$. \medbreak
+ 
+ Sachant que $x^t = \sum_{q \in Q^t} \lambda_q z^q$, nous avons $(x^0~y^0) = (g^0~h^0)$.
  
  \paragraph{Solution duale} En appliquant l'algorithme du volume, nous calculons $\pi^{t}$. Posons $x^t$ la solution de $[M^t]$ et $\hat{\pi}$ la meilleure solution duale (correspondant à $\hat{L}$).
  $$\varrho \leftarrow  \dfrac{\hat{U}-L^{t-1}}{\underbrace{\sqrt{\sum_{\tau=1}^T  
@@ -111,9 +113,11 @@ $$ [DM^t] ~~~ max ~ \eta $$
  Nous pouvons calculer le nouveau vecteur.
  $$ \pi^t_\tau \leftarrow (\hat{\pi}_\tau + \theta \varrho (1-\sum_{i=1}^Ny^{t-1}_{i\tau}))^+ ~~~~ \theta \in [0,2] $$
  
- \paragraph{Oracle} Lagrangian subproblem oracle call
+ \paragraph{Oracle} Lagrangian subproblem oracle call.
  
- $$ z^t \leftarrow arg\min_{(x~y)\in Z}\{ r^t \leftarrow px^T +  \sum_{\tau=1}^T \sum_{i=1}^N ( f_{i\tau} - \pi_{\tau}^t y_{i\tau}) \}$$
+ $$ z^t \leftarrow arg\min_{(x~y)\in Z}\{ r^t \leftarrow px^T +  \sum_{\tau=1}^T \sum_{i=1}^N ( f_{i\tau} - \pi_{\tau}^t) y_{i\tau} \}$$
+ 
+ On résoud ce problème grâce au programme dynamique.
  
  $$L^t \leftarrow r^t + \sum_{\tau=1}^T \pi_{\tau}^t$$
  
@@ -126,8 +130,7 @@ $$ [DM^t] ~~~ max ~ \eta $$
  \paragraph{Solution primale} Méthode du volume
  $$(x~y)^t \leftarrow \alpha (x~y)^{t-1} + (1- \alpha)(g~h)^t$$
  
- \paragraph{Itération}Nous itérons, $t \leftarrow t+1$ et $Q \leftarrow Q \cup  \{(g~h)^t\}$.
- 
+ \paragraph{Itération} Nous itérons, $t \leftarrow t+1$ et $Q \leftarrow Q \cup  \{(g~h)^t\}$.
  
  \section*{Résultats}
  
