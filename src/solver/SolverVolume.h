@@ -11,6 +11,7 @@
 
 namespace solver {
 	typedef std::vector< std::vector<double> > matrix;
+
 	class SolverVolume : public Solver {
 	private:
 
@@ -43,10 +44,10 @@ namespace solver {
 
 	public:
 		SolverVolume(problem::SingleItemLotSizing* problem);
-		virtual ~SolverVolume();
+		~SolverVolume();
 
-		double getValue();
-		std::string toString();
+		double getValue() const;
+		std::string toString() const;
 	};
 }
 #endif

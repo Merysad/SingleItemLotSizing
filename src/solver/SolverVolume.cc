@@ -145,7 +145,7 @@ namespace solver {
 		//Step 0: Initialisation
 		unsigned int t=1;
 		this->init();
-		bool end = false;
+		bool end = true;
 
 		while(end){
 			//Step 1: Calcul d'une solution duale avec la méthode du volume
@@ -177,5 +177,12 @@ namespace solver {
 			//STep 8 
 			t++;
 		}
+	}
+	double SolverVolume::getValue() const{
+		return 0.0;
+	}
+
+	std::string SolverVolume::toString() const {
+		return "...";
 	}
 }
