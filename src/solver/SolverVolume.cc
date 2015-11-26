@@ -5,7 +5,20 @@ namespace solver {
 	SolverVolume::SolverVolume(problem::SingleItemLotSizing* problem){
 		this->easy_problem = new solver::DynamicSolver(problem);
 		this->problem = problem;
+	}
 
+	SolverVolume::~SolverVolume(){
+		/*for( auto b : this->bundle){
+			delete b;
+		}*/
+		delete this->easy_problem;
+		delete this->current_x;
+		delete this->current_y;
+		delete this->current_g;
+		delete this->current_h;
+	}
+
+	void SolverVolume::init(){
 		unsigned int nb_periods = this->problem->getNbPeriods();
 		unsigned int nb_items = this->problem->getNbItems();
 
@@ -45,23 +58,12 @@ namespace solver {
 
 		this->UB = value;
 		this->current_LB = 0; //Pour tester
+		this->best_LB = 0;
 		this->current_x = new problem::Solution(x,value);
 		this->current_y = new problem::Solution(y,value);
 		this->current_g = new problem::Solution(x,value);
 		this->current_h = new problem::Solution(y,value);
 		this->easy_problem->updatePi(this->pi);
- 
-	}
-
-	SolverVolume::~SolverVolume(){
-		/*for( auto b : this->bundle){
-			delete b;
-		}*/
-		delete this->easy_problem;
-		delete this->current_x;
-		delete this->current_y;
-		delete this->current_g;
-		delete this->current_h;
 	}
 
 	void SolverVolume::computeDualLagSolution(){
@@ -140,8 +142,40 @@ namespace solver {
 
 
 	double SolverVolume::solveProblem(){
-		//TODO
+		//Step 0: Initialisation
+		unsigned int t=1;
+		this->init();
+		bool end = false;
+
+		while(end){
+			//Step 1: Calcul d'une solution duale avec la méthode du volume
+			this->computeDualLagSolution();
+
+			//Step 2: Oracle
+			this->computeOracle();
+
+			//Step 3: Langrangian Optimality conditions for P
+			//TODO 
+
+			//Step 4: Meilleure borne ind
+			if(this->current_LB > this->best_LB){
+				this->best_LB = this->current_LB;
+				this->pi_hat = this->pi;
+			}
+
+			//Step 5: Conditions d'optimalité
+			end = this->best_LB + EPSILON > this->UB;
+
+			//Step 6: Nouvelle solution primale //Méthode du volume
+			this->computePrimalSolution();
+
+			//Step 7: Actualiser meilleure solution pour le primal
+			//TODO
+
+			//Test
+			std::cout << "t= " << t << " UB=" << this->UB << " LB=" << this->current_LB << std::endl;
+			//STep 8 
+			t++;
+		}
 	}
-
-
 }

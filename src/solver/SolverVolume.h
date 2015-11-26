@@ -16,6 +16,7 @@ namespace solver {
 
 		static constexpr double THETA = 1.5;
 		static constexpr double ALPHA = 0.7;
+		static constexpr double EPSILON = 2.0;
 
 		problem::SingleItemLotSizing* problem;
 		solver::DynamicSolver* easy_problem;
@@ -31,6 +32,8 @@ namespace solver {
 		double current_LB;
 		double best_LB;
 		double UB;
+
+		void init();
 
 		double solveProblem(); //Algo pour résoudre
 		
